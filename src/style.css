@@ -1,0 +1,59 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Pixelify Sans" , sans-serif;
+}
+
+html,
+body
+{
+    overflow: hidden;
+}
+
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+/*
+utility
+*/
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.modal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c07373;
+  border: 3px solid #ffffff;
+  width: 30vw;
+  max-width: 700px;
+  height: 30vh;
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+}
+.modal-wrapper{
+padding: 12px;
+}
+.modal-header{
+  padding: 4px;
+  background-color:black;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
