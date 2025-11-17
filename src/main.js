@@ -123,7 +123,7 @@ window.addEventListener('resize', () => {
   sizes.height = window.innerHeight
 
   const newAspectRatio = sizes.width / sizes.height
-  const viewSize = 0.5
+  const viewSize = 25
 
   camera.top = viewSize
   camera.bottom = -viewSize
@@ -153,7 +153,7 @@ const modalContent = {
   board: { 
     title: "Web Dev", 
     content: "A lightweight POS and inventory system for two-wheeler garages, built with Flask, HTML, Tailwind CSS, and JSON storage.", 
-    link: "https://github.com/ULTRASIRI/POS-system-for-Gargi-Garage/",
+    link: "https://github.com/ULTRASIRI/POS-system-for-Gargi-Garage/?tab=readme-ov-file",
     image: "/images/garagePOS.webp"
   },
   board001: { 
@@ -164,8 +164,8 @@ const modalContent = {
   },
   board002: { 
     title: "threejs", 
-    content: "", 
-    link: "",
+    content: "ParkFolio", 
+    link: "https://github.com/ULTRASIRI/Parkfolio",
     image: "/images/portf.webp"
   },
   board003: { 
@@ -252,16 +252,16 @@ function handleJumpAnimation() {
 
   // squash
   t1.to(character.instance.scale, {
-    x: base.x * 1.15,
-    y: base.y * 0.85,
-    z: base.z * 1.15,
+    x: base.x * 1.08,
+    y: base.y * 0.93,
+    z: base.z * 1.08,
     duration: jumpDuration * 0.2,
     ease: "power2.out",
   })
   .to(character.instance.scale, {
-    x: base.x * 0.85,
-    y: base.y * 1.15,
-    z: base.z * 0.85,
+    x: base.x * 0.92,
+    y: base.y * 1.07,
+    z: base.z * 0.92,
     duration: jumpDuration * 0.3,
     ease: "power2.out",
   })
@@ -350,7 +350,18 @@ function updatePlayer() {
 
   character.instance.position.copy(playerCollider.start)
   character.instance.position.y -= CAPSULE_RADIUS
-  character.instance.rotation.y = THREE.MathUtils.lerp(character.instance.rotation.y, targetRotation, 0.1)
+
+  const currentY = character.instance.rotation.y
+  let deltaRot = targetRotation - currentY
+
+  // wrap delta to [-PI, PI]
+  deltaRot = (deltaRot + Math.PI) % (Math.PI * 2)
+  if (deltaRot < 0) deltaRot += Math.PI * 2
+  deltaRot -= Math.PI
+
+  // character.instance.rotation.y = THREE.MathUtils.lerp(character.instance.rotation.y, targetRotation, 0.1)
+  character.instance.rotation.y = currentY + deltaRot * 0.1
+
 }
 
 function onKeyDown(event) {
