@@ -38,7 +38,8 @@ const MOVE_SPEED = 10
 let character = {
   instance: null,
   isMoving: false,
-  spawnPosition : new THREE.Vector3()
+  spawnPosition : new THREE.Vector3(),
+  baseScale: new THREE.Vector3(1, 1, 1)
 }
 
 let targetRotation = 0 // ✅ initialize safely
@@ -76,6 +77,8 @@ gltfLoader.load('./models/shreeGarden/shree_man3.glb', (gltf) => {
       character.spawnPosition.copy(child.position)
       character.instance = child
       character.instance.position.set(32.22153310156273,-0.3860074122666504,-88.23170146943266)
+      character.baseScale.copy(child.scale)
+
 
       // ✅ Initialize collider + rotation safely
       playerCollider.start.copy(child.position).add(new THREE.Vector3(0, CAPSULE_RADIUS, 0))
@@ -240,39 +243,43 @@ function jumpCharacter(meshID) {
 //character jump
 
 function handleJumpAnimation() {
-  if (!character.instance || !character.isMoving) return;
+  if (!character.instance || !character.isMoving) return
 
-  const jumpDuration = 0.5;
+  const jumpDuration = 0.3
+  const base = character.baseScale
 
-  const t1 = gsap.timeline();
+  const t1 = gsap.timeline()
 
+  // squash
   t1.to(character.instance.scale, {
-    x: 1.08,
-    y: 0.9,
-    z: 1.08,
-    duration: jumpDuration * 0.2,
+    x: base.x * 1.15,
+    y: base.y * 0.85,
+    z: base.z * 1.15,
+    duration: jumpDuration * 0.3,
     ease: "power2.out",
   })
-    .to(character.instance.scale, {
-      x: 0.92,
-      y: 1.1,
-      z: 0.92,
-      duration: jumpDuration * 0.3,
-      ease: "power2.out",
-    })
-    .to(character.instance.scale, {
-      x: 1,
-      y: 1,
-      z: 1,
-      duration: jumpDuration * 0.3,
-      ease: "power1.inOut",
-    })
-    .to(character.instance.scale, {
-      x: 1,
-      y: 1,
-      z: 1,
-      duration: jumpDuration * 0.2,
-    });
+  .to(character.instance.scale, {
+    x: base.x * 0.85,
+    y: base.y * 1.15,
+    z: base.z * 0.85,
+    duration: jumpDuration * 0.3,
+    ease: "power2.out",
+  })
+  // back to normal
+  .to(character.instance.scale, {
+    x: base.x,
+    y: base.y,
+    z: base.z,
+    duration: jumpDuration * 0.2,
+    ease: "power1.out",
+  })
+  .to(character.instance.scale, {
+    x: base.x,
+    y: base.y,
+    z: base.z,
+    duration: jumpDuration * 0.2,
+    ease: "power1.out",
+  })
 }
 
 
@@ -348,10 +355,11 @@ function updatePlayer() {
 
 function onKeyDown(event) {
 
-  if (event.key.toLowerCase()=== "r"){
+  if (event.key.toLowerCase() === "r") {
     respawnCharacter()
     return
   }
+
   if (!character.instance || character.isMoving || isModalOpen) return
 
   switch (event.key.toLowerCase()) {
@@ -381,6 +389,9 @@ function onKeyDown(event) {
 
   playerVelocity.y = JUMP_HEIGHT
   character.isMoving = true
+
+  // 🔥 Trigger squash & stretch here
+  handleJumpAnimation()
 }
 
 window.addEventListener("keydown", onKeyDown)
