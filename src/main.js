@@ -30,7 +30,7 @@ const GRAVITY = 30
 const CAPSULE_RADIUS = 0.35
 const CAPSULE_HEIGHT = 1
 const JUMP_HEIGHT = 10
-const MOVE_SPEED = 5
+const MOVE_SPEED = 10
 
 /**
  * Character + collider setup
@@ -75,6 +75,7 @@ gltfLoader.load('./models/shreeGarden/shree_man3.glb', (gltf) => {
 
       character.spawnPosition.copy(child.position)
       character.instance = child
+      character.instance.position.set(32.22153310156273,-0.3860074122666504,-88.23170146943266)
 
       // ✅ Initialize collider + rotation safely
       playerCollider.start.copy(child.position).add(new THREE.Vector3(0, CAPSULE_RADIUS, 0))
@@ -88,7 +89,6 @@ gltfLoader.load('./models/shreeGarden/shree_man3.glb', (gltf) => {
     }
   })
 
-  // gltf.scene.scale.set(0.25, 0.25, 0.25)
   scene.add(gltf.scene)
 })
 
@@ -105,8 +105,6 @@ directionalLight.shadow.mapSize.set(4096, 4096)
 directionalLight.shadow.camera.near = 0.5
 directionalLight.shadow.camera.far = 100
 scene.add(directionalLight)
-
-// scene.add(new THREE.CameraHelper(directionalLight.shadow.camera))
 
 /**
  * Sizes + Resize
@@ -149,11 +147,35 @@ window.addEventListener('pointermove', (event) => {
  * Modal Content + UI
  */
 const modalContent = {
-  board: { title: "Project One", content: "This is project One", link: "https://example.com/" },
-  board001: { title: "Project Two", content: "This is project Two", link: "https://example.com/" },
-  board002: { title: "Project Three", content: "This is project Three", link: "https://example.com/" },
-  board003: { title: "Project Four", content: "This is project Four", link: "https://example.com/" },
-  name: { title: "This is name", content: "shree" },
+  board: { 
+    title: "Web Dev", 
+    content: "A lightweight POS and inventory system for two-wheeler garages, built with Flask, HTML, Tailwind CSS, and JSON storage.", 
+    link: "https://github.com/ULTRASIRI/POS-system-for-Gargi-Garage/",
+    image: "/images/garagePOS.webp"
+  },
+  board001: { 
+    title: "Unity", 
+    content: "This is a simple 2D space-shooter game made in Unity where you control a spaceship and destroy incoming asteroids.", 
+    link: "https://play.unity.com/en/games/d4a805ab-478b-4d53-bb5e-462388b13f9a/asteroid-shooter",
+    image: "/images/asteroidShooter.webp"
+  },
+  board002: { 
+    title: "threejs", 
+    content: "", 
+    link: "",
+    image: "/images/portf.webp"
+  },
+  board003: { 
+    title: "Project Four", 
+    content: "This is project Four", 
+    link: "https://example.com/",
+    image: "/images/harry_potter.jpg"
+  },
+  name: { 
+    title: "This is name", 
+    content: "shree",
+    image: "/images/default.jpg"
+  },
 }
 
 const modal = document.querySelector(".modal")
@@ -161,13 +183,17 @@ const modalTitle = document.querySelector(".modal-title")
 const modalDesc = document.querySelector(".modal-project-description")
 const modalExitButton = document.querySelector(".modal-exit-button")
 const modalVisitProjectButton = document.querySelector(".modal-visit-button")
+const modalImg = document.querySelector(".modal-img") // ✅ Image element
+
+let isModalOpen = false; // ✅ track modal state
 
 function showModal(id) {
   const content = modalContent[id]
   if (content) {
     modalTitle.textContent = content.title
     modalDesc.textContent = content.content
-    modal.classList.toggle("hidden")
+    modal.classList.remove("hidden")
+    isModalOpen = true
 
     if (content.link) {
       modalVisitProjectButton.href = content.link
@@ -175,11 +201,19 @@ function showModal(id) {
     } else {
       modalVisitProjectButton.classList.add("hidden")
     }
+
+    // ✅ Update image dynamically
+    if (content.image) {
+      modalImg.src = content.image
+    } else {
+      modalImg.src = "/images/default.jpeg" // fallback
+    }
   }
 }
 
 function hideModal() {
-  modal.classList.toggle("hidden")
+  modal.classList.add("hidden")
+  isModalOpen = false
 }
 
 let intersectObject = ""
@@ -196,21 +230,67 @@ function jumpCharacter(meshID) {
   const t1 = gsap.timeline()
 
   t1.to(mesh.scale, { x: 1.2, y: 0.8, z: 1.2, duration: jumpDuration * 0.2 })
-    .to(mesh.scale, { x: 0.8, y: 1.3, z: 0.8, duration: jumpDuration * 0.3 })
+    .to(mesh.scale, { x: 0.8, y: 1.2, z: 0.8, duration: jumpDuration * 0.3 })
     .to(mesh.position, { y: mesh.position.y + jumpHeight, duration: jumpDuration * 0.5, ease: "power2.out" }, "<")
     .to(mesh.scale, { x: 1.5, y: 1.5, z: 1.5, duration: jumpDuration * 0.3 })
     .to(mesh.position, { y: mesh.position.y, duration: jumpDuration * 0.5, ease: "bounce.out" }, ">")
 }
 
+
+//character jump
+
+function handleJumpAnimation() {
+  if (!character.instance || !character.isMoving) return;
+
+  const jumpDuration = 0.5;
+
+  const t1 = gsap.timeline();
+
+  t1.to(character.instance.scale, {
+    x: 1.08,
+    y: 0.9,
+    z: 1.08,
+    duration: jumpDuration * 0.2,
+    ease: "power2.out",
+  })
+    .to(character.instance.scale, {
+      x: 0.92,
+      y: 1.1,
+      z: 0.92,
+      duration: jumpDuration * 0.3,
+      ease: "power2.out",
+    })
+    .to(character.instance.scale, {
+      x: 1,
+      y: 1,
+      z: 1,
+      duration: jumpDuration * 0.3,
+      ease: "power1.inOut",
+    })
+    .to(character.instance.scale, {
+      x: 1,
+      y: 1,
+      z: 1,
+      duration: jumpDuration * 0.2,
+    });
+}
+
+
+
+
 function onClick() {
-  if (intersectObject) {
+  if (intersectObject && !isModalOpen) {
     if (["tuttle", "Snorlax"].includes(intersectObject)) {
       jumpCharacter(intersectObject)
+    // if (["character"].includes(intersectObject)){
+    //   characterJump(intersectObject)
+    // }  
     } else {
       showModal(intersectObject)
     }
   }
 }
+
 
 window.addEventListener('click', onClick)
 modalExitButton.addEventListener("click", hideModal)
@@ -218,16 +298,14 @@ modalExitButton.addEventListener("click", hideModal)
 /**
  * Player Update + Controls
  */
-
 function respawnCharacter (){
   character.instance.position.copy(character.spawnPosition)
 
   playerCollider.start.copy(character.spawnPosition).add(new THREE.Vector3(0, CAPSULE_RADIUS, 0))
   playerCollider.end.copy(character.spawnPosition).add(new THREE.Vector3(0, CAPSULE_HEIGHT, 0))
 
-//character will not move once respawned
-  playerVelocity.set (0,0,0)
-  character.isMoving= false 
+  playerVelocity.set(0,0,0)
+  character.isMoving = false 
 }
 
 function playerCollisions (){
@@ -235,55 +313,46 @@ function playerCollisions (){
   playerOnFloor= false;
 
   if (result){
-    playerOnFloor =result.normal.y > 0
+    playerOnFloor = result.normal.y > 0
     playerCollider.translate(result.normal.multiplyScalar(result.depth));
 
     if (playerOnFloor){
       character.isMoving = false;
       playerVelocity.x = 0;
       playerVelocity.z = 0;
-
     }
   }
 }
-
-
 
 function updatePlayer() {
 
   if (!character.instance) return
 
-  if (character.instance.y <-0.1){
+  if (character.instance.y <-0.1){  //
     respawnCharacter();
     return;
   }
 
-  // Apply gravity
   if (!playerOnFloor) {
     playerVelocity.y -= GRAVITY * 0.035
   }
 
-  // Move player
   const delta = playerVelocity.clone().multiplyScalar(0.035)
   playerCollider.translate(delta)
   playerCollisions()
 
-  // Update character position and rotation
   character.instance.position.copy(playerCollider.start)
   character.instance.position.y -= CAPSULE_RADIUS
-
-
   character.instance.rotation.y = THREE.MathUtils.lerp(character.instance.rotation.y, targetRotation, 0.1)
 }
 
-
 function onKeyDown(event) {
 
-  if (event.key.toLowerCase()=== "r"){  //debug_ui
+  if (event.key.toLowerCase()=== "r"){
     respawnCharacter()
     return
   }
-  if (!character.instance || character.isMoving) return
+  if (!character.instance || character.isMoving || isModalOpen) return
 
   switch (event.key.toLowerCase()) {
     case "w":
@@ -333,14 +402,7 @@ const camera = new THREE.OrthographicCamera(
 camera.position.set(30, 30, 30)
 
 const cameraOffset = new THREE.Vector3(30,30,30)
-
 scene.add(camera)
-// scene.add(new THREE.CameraHelper(camera))
-
-/**
- * Controls
- */
-
 
 /**
  * Renderer
@@ -361,30 +423,32 @@ function animate() {
   updatePlayer()
 
   if (character.instance){
-    camera.lookAt(character.instance.position)
     const targetCameraPosition = new THREE.Vector3(
       character.instance.position.x + cameraOffset.x , 
       cameraOffset.y ,
-      character.instance.position.z + cameraOffset.z );
+      character.instance.position.z + cameraOffset.z
+    )
     camera.position.copy(targetCameraPosition)
 
-    camera.lookAt(character.instance.position.x,camera.position.y -30 ,character.instance.position.z)
-
+    camera.lookAt(character.instance.position.x, camera.position.y - 30, character.instance.position.z)
   }
-  
-  // controls.update()
 
-  raycaster.setFromCamera(pointer, camera)
-  const intersects = raycaster.intersectObjects(intersectObjects, true)
+  // Raycasting disabled while modal is open
+  if (!isModalOpen) {
+    raycaster.setFromCamera(pointer, camera)
+    const intersects = raycaster.intersectObjects(intersectObjects, true)
 
-  if (intersects.length > 0) {
-    document.body.style.cursor = "pointer"
-    intersectObject = intersects[0].object.parent.name
+    if (intersects.length > 0) {
+      document.body.style.cursor = "pointer"
+      intersectObject = intersects[0].object.parent.name
+    } else {
+      document.body.style.cursor = "default"
+      intersectObject = ""
+    }
   } else {
     document.body.style.cursor = "default"
     intersectObject = ""
   }
-
 
   renderer.render(scene, camera)
   window.requestAnimationFrame(animate)
