@@ -9,6 +9,87 @@ import { Capsule } from 'three/addons/math/Capsule.js'
 import { Howl, Howler } from 'howler' //audio
 
 //loading screen 
+const loadingScreen = document.getElementById('loadingScreen')
+const loadingText   = document.querySelector('.loading-text')
+const enterButton   = document.querySelector('.enter-button')
+const instructions  = document.querySelector('.instructions')
+
+// Three.js LoadingManager
+const manager = new THREE.LoadingManager()
+
+manager.onLoad = () => {
+  // when ALL resources using this manager are loaded
+  // fade out "Loading..." and show the button
+  gsap.to(loadingText, {
+    opacity: 0,
+    duration: 0.3,
+  })
+
+  gsap.to(enterButton, {
+    opacity: 1,
+    duration: 0.3,
+  })
+}
+
+enterButton.addEventListener('click', () => {
+  // instantly hide overlay (you can animate opacity if you want)
+  gsap.to(loadingScreen, {
+    opacity: 0,
+    duration: 0.3,
+    onComplete: () => {
+      loadingScreen.remove()
+    },
+  })
+
+  gsap.to(instructions, {
+    opacity: 0,
+    duration: 0.3,
+  })
+
+  // start sounds if not muted
+  if (!isMuted) {
+    playSound('projectsSFX')      // small click / confirm sound
+    playSound('backgroundMusic')  // start BGM
+  }
+})
+
+/** moblie controls */
+
+
+
+function startMove(direction) {
+  if (!character.instance || character.isMoving || isModalOpen) return
+
+  switch (direction) {
+    case 'up':
+      playerVelocity.x -= MOVE_SPEED
+      targetRotation = 0
+      break
+    case 'down':
+      playerVelocity.x += MOVE_SPEED
+      targetRotation = Math.PI
+      break
+    case 'left':
+      playerVelocity.z += MOVE_SPEED
+      targetRotation = -Math.PI / 2
+      break
+    case 'right':
+      playerVelocity.z -= MOVE_SPEED
+      targetRotation = Math.PI / 2
+      break
+    default:
+      return
+  }
+
+  playerVelocity.y = JUMP_HEIGHT
+  character.isMoving = true
+
+  // optional: sound here, if you wired Howler
+  // playSound('jumpSFX')
+
+  handleJumpAnimation()
+}
+
 
 
 /**
@@ -38,7 +119,7 @@ audioToggle.addEventListener('click', () => {
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('/draco')
 
-const gltfLoader = new GLTFLoader()
+const gltfLoader = new GLTFLoader(manager)
 gltfLoader.setDRACOLoader(dracoLoader)
 
 /**
@@ -282,7 +363,39 @@ const modalTitle = document.querySelector(".modal-title")
 const modalDesc = document.querySelector(".modal-project-description")
 const modalExitButton = document.querySelector(".modal-exit-button")
 const modalVisitProjectButton = document.querySelector(".modal-visit-button")
-const modalImg = document.querySelector(".modal-img") // ✅ Image element
+const modalImg = document.querySelector(".modal-img") 
+
+//mobile controls
+const mobileControls = {
+  up: document.querySelector('.mobile-control.up-arrow'),
+  down: document.querySelector('.mobile-control.down-arrow'),
+  left: document.querySelector('.mobile-control.left-arrow'),
+  right: document.querySelector('.mobile-control.right-arrow'),
+}
+
+// bind mobile controls
+function bindMobileControl(el, direction) {
+  if (!el) return
+
+  // Touch
+  el.addEventListener('touchstart', (e) => {
+    e.preventDefault()
+    startMove(direction)
+  }, { passive: false })
+
+  // Mouse (for testing in dev tools)
+  el.addEventListener('mousedown', (e) => {
+    e.preventDefault()
+    startMove(direction)
+  })
+}
+bindMobileControl(mobileControls.up, 'up')
+bindMobileControl(mobileControls.down, 'down')
+bindMobileControl(mobileControls.left, 'left')
+bindMobileControl(mobileControls.right, 'right')
+
+
+
 
 let isModalOpen = false; // ✅ track modal state
 

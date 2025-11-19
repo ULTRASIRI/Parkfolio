@@ -44,6 +44,64 @@ utility
   transition: opacity 0.3s ease;
 }
 
+/* Loading Screen */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ad8671;  /* or your background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 12px solid white;
+  z-index: 1000;
+}
+
+.loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 36px;
+}
+
+.enter-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 24px;
+  background: transparent;
+  border: 3px solid white;
+  padding: 8px 20px;
+  opacity: 0; /* start hidden, fade in when loaded */
+}
+
+.enter-button:hover {
+  cursor: pointer;
+  background-color: #fff;
+  color: #ad8671;
+}
+
+.instructions {
+  z-index: 1000;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 18px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
 .modal{
   display: flex;
   align-items: center;
@@ -116,4 +174,43 @@ utility
   flex-direction: column;
 }
 
+/* mobile controls */
+.mobile-control {
+  z-index: 500;
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  height: 56px;
+  width: 56px;
+  display: none;            /* hidden on desktop, shown on mobile */
+  justify-content: center;
+  align-items: center;
+  border: 3px solid white;
+  border-radius: 8px;
+  font-size: 24px;
+  cursor: pointer;
+}
 
+/* positions relative to center button */
+.up-arrow {
+  transform: translate(-50%, -80px);
+}
+.down-arrow {
+  transform: translate(-50%, 0);
+}
+.left-arrow {
+  transform: translate(-110px, -40px);
+}
+.right-arrow {
+  transform: translate(10px, -40px);
+}
+
+/* show them on smaller screens */
+@media (max-width: 900px) {
+  .mobile-control {
+    display: flex;
+  }
+}
