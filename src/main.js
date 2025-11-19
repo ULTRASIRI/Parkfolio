@@ -13,6 +13,7 @@ const loadingScreen = document.getElementById('loadingScreen')
 const loadingText   = document.querySelector('.loading-text')
 const enterButton   = document.querySelector('.enter-button')
 const instructions  = document.querySelector('.instructions')
+const mobileControlsContainer = document.querySelector('.mobile-controls-container')
 
 // Three.js LoadingManager
 const manager = new THREE.LoadingManager()
@@ -32,7 +33,6 @@ manager.onLoad = () => {
 }
 
 enterButton.addEventListener('click', () => {
-  // instantly hide overlay (you can animate opacity if you want)
   gsap.to(loadingScreen, {
     opacity: 0,
     duration: 0.3,
@@ -46,11 +46,14 @@ enterButton.addEventListener('click', () => {
     duration: 0.3,
   })
 
-  // start sounds if not muted
+  // 🔊 start sounds if not muted
   if (!isMuted) {
-    playSound('projectsSFX')      // small click / confirm sound
-    playSound('backgroundMusic')  // start BGM
+    playSound('projectsSFX')
+    playSound('backgroundMusic')
   }
+
+  // ✅ show mobile controls AFTER entering park
+  mobileControlsContainer.classList.remove('hidden')
 })
 
 /** moblie controls */
