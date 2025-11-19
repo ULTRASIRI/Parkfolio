@@ -7,6 +7,10 @@ import { gsap } from "gsap";
 import { Octree } from 'three/addons/math/Octree.js'
 import { Capsule } from 'three/addons/math/Capsule.js'
 
+
+//loading screen 
+
+
 /**
  * Base setup
  */
@@ -101,13 +105,39 @@ gltfLoader.load('./models/shreeGarden/shree_man3.glb', (gltf) => {
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
 scene.add(ambientLight)
 
+// const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8)
+// directionalLight.castShadow = true
+// directionalLight.position.set(50, 80, 50)
+// directionalLight.shadow.mapSize.set(2048, 2048)
+// directionalLight.shadow.camera.near = 0.5
+// directionalLight.shadow.camera.far = 300
+
+// directionalLight.shadow.bias = -0.0005
+// directionalLight.shadow.normalBias = 0.05
+// scene.add(directionalLight)
+// const helper = new THREE.CameraHelper(directionalLight.shadow.camera)
+// scene.add(helper)
+
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8)
 directionalLight.castShadow = true
-directionalLight.position.set(-5, 20, 5)
+directionalLight.position.set(-50, 80, 50)
+
 directionalLight.shadow.mapSize.set(4096, 4096)
-directionalLight.shadow.camera.near = 0.5
-directionalLight.shadow.camera.far = 100
+
+const shadowCam = directionalLight.shadow.camera
+shadowCam.near = 1
+shadowCam.far = 300   // already big enough, just keep it
+shadowCam.left   = -150
+shadowCam.right  =  150
+shadowCam.top    =  150
+shadowCam.bottom = -150
+shadowCam.updateProjectionMatrix()
+
+directionalLight.shadow.bias = -0.0005
+directionalLight.shadow.normalBias = 0.05
+
 scene.add(directionalLight)
+
 
 /**
  * Sizes + Resize
@@ -169,10 +199,10 @@ const modalContent = {
     image: "/images/portf.webp"
   },
   board003: { 
-    title: "Project Four", 
-    content: "This is project Four", 
+    title: "TalkFlow", 
+    content: "This project is under Development", 
     link: "https://example.com/",
-    image: "/images/harry_potter.jpg"
+    image: "/images/talkFlow.webp"
   },
   name: { 
     title: "This is name", 
@@ -288,10 +318,7 @@ function handleJumpAnimation() {
 function onClick() {
   if (intersectObject && !isModalOpen) {
     if (["tuttle", "Snorlax"].includes(intersectObject)) {
-      jumpCharacter(intersectObject)
-    // if (["character"].includes(intersectObject)){
-    //   characterJump(intersectObject)
-    // }  
+      jumpCharacter(intersectObject) 
     } else {
       showModal(intersectObject)
     }
@@ -335,7 +362,7 @@ function updatePlayer() {
 
   if (!character.instance) return
 
-  if (character.instance.y <-0.1){  //
+  if (character.instance.position.y <-35){  //if character falls out of ground then it will respawn
     respawnCharacter();
     return;
   }
@@ -447,7 +474,7 @@ function animate() {
   if (character.instance){
     const targetCameraPosition = new THREE.Vector3(
       character.instance.position.x + cameraOffset.x , 
-      cameraOffset.y ,
+      cameraOffset.y +10 ,
       character.instance.position.z + cameraOffset.z
     )
     camera.position.copy(targetCameraPosition)
@@ -457,19 +484,43 @@ function animate() {
 
   // Raycasting disabled while modal is open
   if (!isModalOpen) {
-    raycaster.setFromCamera(pointer, camera)
-    const intersects = raycaster.intersectObjects(intersectObjects, true)
-
+    raycaster.setFromCamera(pointer, camera);
+  
+    // Raycast against the whole scene or your pre-collected list.
+    // Using scene.children is more robust; you can swap back to intersectObjects if you
+    // want to limit targets for performance (but then make sure you pushed the right nodes).
+    const intersects = raycaster.intersectObjects(scene.children, true);
+  
     if (intersects.length > 0) {
-      document.body.style.cursor = "pointer"
-      intersectObject = intersects[0].object.parent.name
+      // walk intersects in order (closest first) and climb parents until we find a named interactable
+      let foundName = "";
+      for (let i = 0; i < intersects.length; i++) {
+        let o = intersects[i].object;
+        while (o) {
+          if (intersectObjectsNames.includes(o.name)) {
+            foundName = o.name;
+            break;
+          }
+          o = o.parent;
+        }
+        if (foundName) break;
+      }
+  
+      if (foundName) {
+        intersectObject = foundName;
+        document.body.style.cursor = "pointer";
+      } else {
+        intersectObject = "";
+        document.body.style.cursor = "default";
+      }
+  
     } else {
-      document.body.style.cursor = "default"
-      intersectObject = ""
+      intersectObject = "";
+      document.body.style.cursor = "default";
     }
   } else {
-    document.body.style.cursor = "default"
-    intersectObject = ""
+    intersectObject = "";
+    document.body.style.cursor = "default";
   }
 
   renderer.render(scene, camera)

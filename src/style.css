@@ -49,8 +49,8 @@ utility
 }
 
 .modal-img{
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   margin-bottom: 12px;
 }
 .modal-wrapper{
@@ -102,3 +102,5 @@ utility
 
   flex-direction: column;
 }
+
+
