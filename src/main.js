@@ -305,7 +305,7 @@ const modalContent = {
   board002: {
     title: "threejs",
     content: "ParkFolio",
-    link: "https://github.com/ULTRASIRI/Parkfolio",
+    link: "https://parkfolio-three.vercel.app/",
     image: "/images/portf.webp"
   },
   board003: {
