@@ -21,6 +21,8 @@ const modalTitle = document.querySelector('.modal-title')
 const modalDesc = document.getElementById('modalDesc')
 const modalExitButton = document.getElementById('modalExit')
 const modalVisitProjectButton = document.getElementById('modalVisit')
+const modalLinkedIn = document.getElementById('modalLinkedIn')
+const modalEmail = document.getElementById('modalEmail')
 const modalImg = document.getElementById('modalImg')
 const audioToggle = document.getElementById('audioToggle')
 const audioOnSpan = audioToggle.querySelector('.audio-on')
@@ -318,7 +320,9 @@ const modalContent = {
     title: "Shrinath Hinge",
     content: "Aspiring Software Developer (2026 Batch).",
     link: "https://github.com/SUPERSIRI9/Resume/blob/main/reumeShri.pdf/",
-    image: "/images/me.webp"
+    image: "/images/me.webp",
+    linkedin: "https://www.linkedin.com/in/shrinath-hinge/",
+    email: "mailto:shrinathhinge0303@gmail.com"
   },
 }
 
@@ -333,6 +337,8 @@ function showModal(id){
   modalTitle.textContent = content.title
   modalDesc.textContent = content.content
   modalImg.src = content.image || "/images/default.jpeg"
+  modalLinkedIn.classList.add("hidden");
+  modalEmail.classList.add("hidden");
   if (content.link) {
     modalVisitProjectButton.href = content.link
     modalVisitProjectButton.classList.remove('hidden')
@@ -342,6 +348,17 @@ function showModal(id){
   // Change button text for the 'name' modal
   if (id === "name") {
     modalVisitProjectButton.textContent = "View Resume";
+  
+    if (content.linkedin) {
+      modalLinkedIn.href = content.linkedin;
+      modalLinkedIn.classList.remove("hidden");
+    }
+  
+    if (content.email) {
+      modalEmail.href = content.email;
+      modalEmail.classList.remove("hidden");
+    }
+  
   } else {
     modalVisitProjectButton.textContent = "View Project";
   }
