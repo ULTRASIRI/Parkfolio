@@ -300,25 +300,25 @@ const modalContent = {
   },
   board001: {
     title: "Unity",
-    content: "A 2D space-shooter game made in Unity.",
+    content: "Asteroid Shooter: A 2D space-shooter game made in Unity.",
     link: "https://play.unity.com/en/games/d4a805ab-478b-4d53-bb5e-462388b13f9a/asteroid-shooter",
     image: "/images/asteroidShooter.webp"
   },
   board002: {
     title: "threejs",
-    content: "ParkFolio",
+    content: "ParkFolio: A Portfolio website made with threeJs, html, css",
     link: "https://parkfolio-three.vercel.app/",
     image: "/images/portf.webp"
   },
   board003: {
     title: "TalkFlow",
-    content: "This project is under development.",
+    content: "A Speech to Speech translation software using machine Learning (under construction).",
     link: "https://example.com/",
     image: "/images/talkFlow.webp"
   },
   name: {
     title: "Shrinath Hinge",
-    content: "Aspiring Software Developer (2026 Batch).",
+    content: "Hi, I’m Shrinath — I build VR experiences, 3D web apps, and full-stack tools. Still learning, always shipping",
     link: "https://github.com/SUPERSIRI9/Resume/blob/main/reumeShri.pdf/",
     image: "/images/me.webp",
     linkedin: "https://www.linkedin.com/in/shrinath-hinge/",

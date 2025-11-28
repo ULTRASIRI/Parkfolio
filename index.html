@@ -87,27 +87,32 @@
             <p class="modal-project-description" id="modalDesc">
               Description...
             </p>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="modal-project-visit-button hidden"
-              id="modalVisit"
-              >View Project</a>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="modal-project-visit-button hidden"
-              id="modalLinkedIn"
-            >LinkedIn</a>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="modal-project-visit-button hidden"
-              id="modalEmail"
-            >Email</a>
+            <!-- Buttons row (inside .modal-content-wrapper, below modalDesc) -->
+              <div class="modal-buttons" role="group" aria-label="Project links">
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="modal-project-visit-button hidden"
+                  id="modalVisit"
+                >View Project</a>
+              
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="modal-project-visit-button hidden"
+                  id="modalLinkedIn"
+                >LinkedIn</a>
+              
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="modal-project-visit-button hidden"
+                  id="modalEmail"
+                >Email</a>
+              </div>
           </div>
         </div>
       </div>
@@ -116,28 +121,28 @@
     <!-- Mobile controls -->
     <div class="mobile-controls-container hidden" id="mobileControlsContainer">
       <div class="mobile-control up-arrow" role="button" aria-label="Move up">
-        ▲
+        <ion-icon name="caret-up-sharp"></ion-icon>
       </div>
       <div
         class="mobile-control left-arrow"
         role="button"
         aria-label="Move left"
       >
-        ◀
+      <ion-icon name="caret-back-sharp"></ion-icon>
       </div>
       <div
         class="mobile-control right-arrow"
         role="button"
         aria-label="Move right"
       >
-        ▶
+      <ion-icon name="caret-forward-sharp"></ion-icon>
       </div>
       <div
         class="mobile-control down-arrow"
         role="button"
         aria-label="Move down"
       >
-        ▼
+      <ion-icon name="caret-down-sharp"></ion-icon>
       </div>
     </div>
 

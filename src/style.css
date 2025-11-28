@@ -138,3 +138,36 @@ body, :root { transition: background-color .35s ease, color .35s ease; }
 .ion-icon{
   color: #fff;
 }
+
+/* Buttons row inside modal */
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  margin-top: 8px;
+}
+
+.modal-project-visit-button {
+  display: inline-flex;           /* center alignment */
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  min-width: 92px;               
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Responsive fallback: stack vertically on narrow screens */
+@media (max-width: 420px) {
+  .modal-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-project-visit-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
