@@ -187,7 +187,7 @@ if (isDark) {
   if (scene.fog) {
     gsap.to(scene.fog, {
       near: 9999,
-      far: 10000,
+      far: 100,
       duration: 0.4,
       onComplete: () => { scene.fog = null; }
     });
