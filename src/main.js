@@ -327,15 +327,7 @@ const modalContent = {
   credits: {
     title: "Credits",
     content: 
-      "Built by Shrinath Hinge.\n\n" +
-      "Tech Stack:\n" +
-      "• Three.js\n" +
-      "• GSAP\n" +
-      "• Howler.js\n\n" +
-      "3D Assets & Inspiration:\n" +
-      "• Custom Blender models\n" +
-      "• Low-poly style inspiration\n\n" +
-      "Sound Effects & Music used for educational and portfolio purposes.",
+      "Thanks to Andrew Woan For grat tutorial",
     image: "/images/portf.webp"
   }
   
