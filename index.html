@@ -21,26 +21,35 @@
       <canvas id="webglCanvas" class="webgl" tabindex="0"></canvas>
     </div>
 
-    <!-- Loading Screen -->
-    <div
-      class="loading-screen"
-      id="loadingScreen"
-      role="status"
-      aria-live="polite"
-    >
-      <div class="loading-text">Loading...</div>
-      <button
-        class="enter-button"
-        id="enterButton"
-        type="button"
-        aria-label="Enter Park"
-      >
-        Enter Park!
-      </button>
-      <div class="instructions">
-        ~ use WASD / arrows to move ~ <br />~ R to respawn ~
-      </div>
-    </div>
+ 
+<div
+class="loading-screen"
+id="loadingScreen"
+role="status"
+aria-live="polite"
+>
+<div class="loading-text">Loading...</div>
+
+<button
+  class="enter-button"
+  id="enterButton"
+  type="button"
+  aria-label="Enter Park"
+>
+  Enter Park!
+</button>
+
+<div class="instructions">
+  ~ use WASD / arrows to move ~ <br />
+  ~ R to respawn ~ <br />
+
+  <!-- CREDITS LINK -->
+  <a href="#" class="credits-link" id="creditsLink">
+    credits
+  </a>
+</div>
+</div>
+
 
     <!-- Audio toggle -->
     <button class="audio-toggle" id="audioToggle" aria-label="Toggle audio">

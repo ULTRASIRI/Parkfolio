@@ -324,63 +324,107 @@ const modalContent = {
     linkedin: "https://www.linkedin.com/in/shrinath-hinge/",
     email: "mailto:shrinathhinge0303@gmail.com"
   },
+  credits: {
+    title: "Credits",
+    content: 
+      "Built by Shrinath Hinge.\n\n" +
+      "Tech Stack:\n" +
+      "• Three.js\n" +
+      "• GSAP\n" +
+      "• Howler.js\n\n" +
+      "3D Assets & Inspiration:\n" +
+      "• Custom Blender models\n" +
+      "• Low-poly style inspiration\n\n" +
+      "Sound Effects & Music used for educational and portfolio purposes.",
+    image: "/images/portf.webp"
+  }
+  
 }
+
+// ---------------------- Credits link (loading screen) ----------------------
+const creditsLink = document.getElementById('creditsLink')
+
+creditsLink.addEventListener('click', (e) => {
+  e.preventDefault()
+
+  // allow modal before entering park
+  showModal('credits')
+})
+
 
 // ---------------------- Modal show/hide ----------------------
 let isModalOpen = false
 let intersectObject = ""
+let hasEnteredPark = false   
+
 
 function showModal(id){
   const content = modalContent[id]
   if (!content) return
+
   if (!isMuted) playSound('projectsSFX')
+
   modalTitle.textContent = content.title
   modalDesc.textContent = content.content
   modalImg.src = content.image || "/images/default.jpeg"
-  modalLinkedIn.classList.add("hidden");
-  modalEmail.classList.add("hidden");
+
+  modalLinkedIn.classList.add("hidden")
+  modalEmail.classList.add("hidden")
+
   if (content.link) {
     modalVisitProjectButton.href = content.link
     modalVisitProjectButton.classList.remove('hidden')
   } else {
     modalVisitProjectButton.classList.add('hidden')
   }
-  // Change button text for the 'name' modal
+
   if (id === "name") {
-    modalVisitProjectButton.textContent = "View Resume";
-  
+    modalVisitProjectButton.textContent = "View Resume"
+
     if (content.linkedin) {
-      modalLinkedIn.href = content.linkedin;
-      modalLinkedIn.classList.remove("hidden");
+      modalLinkedIn.href = content.linkedin
+      modalLinkedIn.classList.remove("hidden")
     }
-  
+
     if (content.email) {
-      modalEmail.href = content.email;
-      modalEmail.classList.remove("hidden");
+      modalEmail.href = content.email
+      modalEmail.classList.remove("hidden")
     }
-  
   } else {
-    modalVisitProjectButton.textContent = "View Project";
+    modalVisitProjectButton.textContent = "View Project"
   }
+
   modal.classList.remove('hidden')
   modalBg.classList.remove('hidden')
   modal.setAttribute('aria-hidden', 'false')
   isModalOpen = true
+
   modalExitButton.focus()
-  mobileControlsContainer.classList.add("hidden");
+
+  mobileControlsContainer.classList.add("hidden")
 }
 
 function hideModal(){
   if (!isModalOpen) return
+
   if (!isMuted) playSound('projectsSFX')
+
   modal.classList.add('hidden')
   modalBg.classList.add('hidden')
   modal.setAttribute('aria-hidden', 'true')
+
   isModalOpen = false
-  mobileControlsContainer.classList.remove("hidden");
+
+  if (hasEnteredPark) {
+    mobileControlsContainer.classList.remove("hidden")
+  } else {
+    mobileControlsContainer.classList.add("hidden")
+  }
+
   const elToFocus = document.querySelector('.enter-button') || canvas
   if (elToFocus) elToFocus.focus()
 }
+
 
 modalExitButton.addEventListener('click', hideModal)
 modalExitButton.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); hideModal(); }, { passive: false })
@@ -631,6 +675,7 @@ renderer.setAnimationLoop(animate)
 enterButton.addEventListener('click', () => {
   gsap.to(loadingScreen, { opacity: 0, duration: 0.3, onComplete: () => loadingScreen.remove() })
   gsap.to(instructions, { opacity: 0, duration: 0.3 })
+  hasEnteredPark = true 
   if (!isMuted) {
     playSound('projectsSFX')
     sounds.backgroundMusic.play()

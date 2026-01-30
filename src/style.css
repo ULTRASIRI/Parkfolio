@@ -171,3 +171,18 @@ body, :root { transition: background-color .35s ease, color .35s ease; }
     min-width: 0;
   }
 }
+
+
+/* Credits link (loading screen) */
+.credits-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #ffffff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.credits-link:hover {
+  opacity: 0.8;
+}
